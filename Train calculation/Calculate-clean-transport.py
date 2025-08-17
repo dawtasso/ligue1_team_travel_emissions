@@ -15,7 +15,7 @@ list_team=list(team_df["Team"])
 Emission_TGV=3.5 #gCO2/passagers/km
 Emission_train=7.5 #gCO2/passagers/km
 Emission_autocar=30 #gCO2/passagers/km
-Nombre_passagers=50#sys.argv[1]
+Nombre_passagers=sys.argv[1]
 
 list1=[]
 list2=[]
@@ -125,5 +125,6 @@ df["Time"]=time_list
 df["Number of steps"]=steps_list
 df["emission_carbone"]=emission_list
 print(df)
+
 
 df.to_csv("emission_carbone_match.csv")
