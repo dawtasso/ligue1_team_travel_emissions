@@ -25,7 +25,7 @@ reconstructed_data = reconstructed_data.rename(columns={"v": "Visiting team"})
 
 def get_emissions_and_time(
     visiting_team_name: str, hosting_team_name: str, transport_type: str
-) -> Tuple[float, float]:
+) -> Tuple[float, float,float]:
     """
     Get the emissions and time for a given transport mode.
     """
@@ -37,7 +37,7 @@ def get_emissions_and_time(
         case "train":
             dataset = emission_train_data
         case _:
-            return 0.0, 0.0
+            return 0.0, 0.0, 0.0
 
     subset = dataset[
         (dataset["departure"] == visiting_team_name)
@@ -51,13 +51,16 @@ def get_emissions_and_time(
         ]
         emission_in_kg = subset2["emissions_kg_co2"].iloc[0]
         time_in_sec = subset2["travel_time_seconds"].iloc[0]
+        distance_km = subset2["distance_km"].iloc[0]
     else:
         emission_in_kg = subset["emissions_kg_co2"].iloc[0]
         time_in_sec = subset["travel_time_seconds"].iloc[0]
+        distance_km = subset["distance_km"].iloc[0]
 
     return (
         emission_in_kg,
         time_in_sec,
+        distance_km
     )
 
 
@@ -68,38 +71,41 @@ def main():
     # Calculate the emissions and time for each transport mode
     list_emissions: list[float] = []
     list_time: list[float] = []
+    list_distance: list[float] = []
     for _, row in reconstructed_data.iterrows():
         visiting_team = row["Visiting team"]
         hosting_team = row["Host team"]
         transport = row["Transport"]
 
-        emission, time = get_emissions_and_time(
+        emission, time, distance = get_emissions_and_time(
             visiting_team, hosting_team, transport.lower()
         )
 
         # if the transport is not bus, we add the emissions of the bus for the empty bus trip
         if transport != "bus" and visiting_team != hosting_team:
-            emission_bus, _ = get_emissions_and_time(
+            emission_bus1, _, _d_ = get_emissions_and_time(
                 visiting_team, hosting_team, "bus".lower()
             )
-            emission += emission_bus
+            emission += emission_bus1
 
         list_emissions.append(emission)
         list_time.append(time)
+        list_distance.append(distance)
 
     # Calculate the alternative emissions and time
     list_alternative_emissions = []
     list_alternative_time = []
+    list_alternative_distance = []
     list_alternative_emissions_wo_bus = []
     for _, row in reconstructed_data.iterrows():
         visiting_team = row["Visiting team"]
         hosting_team = row["Host team"]
 
         if visiting_team != hosting_team:
-            emission_train, time_train = get_emissions_and_time(
+            emission_train, time_train, distance_train = get_emissions_and_time(
                 visiting_team, hosting_team, "train"
             )
-            emission_bus, time_bus = get_emissions_and_time(
+            emission_bus, time_bus, distance_bus = get_emissions_and_time(
                 visiting_team, hosting_team, "bus"
             )
 
@@ -107,6 +113,7 @@ def main():
                 list_alternative_emissions.append(emission_bus)
                 list_alternative_emissions_wo_bus.append(emission_bus)
                 list_alternative_time.append(time_bus)
+                list_alternative_distance.append(distance_bus)
 
             # If the time of the train is less than the time of the bus, add the emissions and time of the bus
             # we prefer the train, and add the emissions of the bus for the empty bus trip
@@ -115,20 +122,24 @@ def main():
                 list_alternative_emissions.append(emission_train_w_bus)
                 list_alternative_emissions_wo_bus.append(emission_train)
                 list_alternative_time.append(time_train)
+                list_alternative_distance.append(distance_train)
         else:
             list_alternative_emissions.append(0)
             list_alternative_emissions_wo_bus.append(0)
             list_alternative_time.append(0)
+            list_alternative_distance.append(0)
 
     # Create the final dataframe
     final_df = reconstructed_data.copy()
     final_df["emissions_kg_co2"] = list_emissions
     final_df["travel_time_seconds"] = list_time
+    final_df["distance_km"] = list_distance
     final_df["alternative_emissions_kg_co2"] = list_alternative_emissions
     final_df["alternative_emissions_kg_co2_wo_empty_bus"] = (
         list_alternative_emissions_wo_bus
     )
     final_df["alternative_travel_time_seconds"] = list_alternative_time
+    final_df["alternative_distance_km"] = list_alternative_distance
 
     final_df.to_csv(DATA_PATH + "total_emmissions.csv", index=False)
 
