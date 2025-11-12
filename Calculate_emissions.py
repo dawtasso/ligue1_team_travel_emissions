@@ -2,6 +2,7 @@ from typing import Tuple
 
 import pandas as pd
 
+
 from backend.global_variables import DATA_PATH
 
 data = pd.read_excel(
