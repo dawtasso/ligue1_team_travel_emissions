@@ -102,7 +102,7 @@ def main():
             list_id.append(i)
             list_aller_retour.append("retour")
             list_transport.append("avion")
-            list_emissions.append(emission_retour/2)
+            list_emissions.append((emission_retour+emission_aller)/2)# Pour prendre en considération le bus à vide
             list_time.append(time_retour/2)
             list_distance.append(distance_retour/2)
             i+=1
@@ -116,7 +116,7 @@ def main():
             list_id.append(i)
             list_transport.append("train")
             list_aller_retour.append("aller")
-            list_emissions.append(emission_aller/2)
+            list_emissions.append((emission_aller+emission_retour)/2)
             list_time.append(time_aller/2)
             list_distance.append(distance_aller/2)
             list_id.append(i)
