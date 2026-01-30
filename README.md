@@ -65,13 +65,13 @@ Estimate CO₂ emissions for Ligue 1 team travel by rail, road, and air. The pro
   uv run python -m scripts.calculate_emissions
   ```
 
-## Citation & Attribution (Required)
+## Citation & Attribution
 
-This project and its data are protected under the French Intellectual Property Code (Article L121-1). If you use this software, the computed emissions data, or the methodology in your reporting, **attribution is legally required.**
+This project and its data are protected under the French Intellectual Property Code (Article L111-1). If you use this software, the computed emissions data, or the methodology in your reporting, **attribution is legally required.**
 
 Please cite the authors as follows:
 
-> Farah, M., Muhieddine, U., & Stührenberg, L. (2026). Ligue1 Emissions. Source: https://github.com/Mi-farah/Ligue1
+> Farah, M., Muhieddine, U., & Stührenberg, L. (2026). Ligue1 team travel CO2 Emissions. Source: https://github.com/Mi-farah/Ligue1
 
 For academic or technical use, please refer to the `CITATION.cff` file.
 
