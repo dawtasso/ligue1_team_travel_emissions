@@ -10,7 +10,7 @@ authors:
 title: "Ligue1 Emissions"
 version: 1.0.0
 date-released: 2026-01-30
-url: "https://github.com/Mi-farah/Ligue1"
+url: "https://github.com/dawtasso/ligue1_team_travel_emissions"
 abstract: >-
   This project calculates the emissions of Ligue1 teams' travels using train, plane, and car routes.
 keywords:
