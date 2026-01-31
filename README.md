@@ -71,7 +71,7 @@ This project and its data are protected under the French Intellectual Property C
 
 Please cite the authors as follows:
 
-> Farah, M., Muhieddine, U., & Stührenberg, L. (2026). Ligue1 team travel CO2 Emissions. Source: https://github.com/dawtasso/ligue1_team_travel_emissions
+> Dawta, Farah, M., Muhieddine, U., & Stührenberg, L. (2026). Ligue1 team travel CO2 Emissions. Source: https://github.com/dawtasso/ligue1_team_travel_emissions
 
 For academic or technical use, please refer to the `CITATION.cff` file.
 
